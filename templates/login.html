@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BITS Tinder</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path fill='%23EC4899' d='M9.653 16.915l-.005-.003-.019-.01a20.759 20.759 0 01-1.162-.682 22.045 22.045 0 01-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 018-2.828A4.5 4.5 0 0118 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 01-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 01-.69.001l-.002-.001z'/></svg>">
+    <!-- Fallback favicon for browsers that don't support SVG -->
+    <link rel="shortcut icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAYAAAALAAAADwAAABEAAAASAAAAEgAAABEAAAAPAAAACwAAAAYAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAATAAAAIwAAACsAAAAwAAAAMgAAADIAAAAwAAAAKwAAACMAAAATAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAA4AAAAVAAAAGQAAABsAAAAbAAAAGQAAABUAAAAOAAAABgAAAAAAAAAAAAAAAAAAAAAAAAACAAAAEQAAACsAAABFAAAAVAAAAF0AAABfAAAAXQAAAFQAAABFAAAAKwAAABEAAAACAAAAAAAAAAAAAAAEAAAAGQAAAEAAAABrAAAAkAAAAKQAAACoAAAAqAAAAKQAAACQAAAAawAAAEAAAAAZAAAABAAAAAAAAAACAAAAEwAAAEAAAACEAAAA1AAAAO8AAAD3AAAA+QAAAPcAAADvAAAA1AAAAIQAAABAAAAAEwAAAAIAAAAAAAAABgAAACoAAABrAAAA1AAAAPwAAAD/AAAA/wAAAP8AAAD/AAAA/AAAANQAAABrAAAAKgAAAAYAAAAAAAAAAAAAAAwAAABFAAAAkAAAAO8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAO8AAACQAAAARQAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAVAAAAKQAAAD3AAAA/wAAAP8AAAD/AAAA/wAAAPcAAACkAAAAVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQAAAF0AAACoAAAA+QAAAP8AAAD/AAAA/wAAAP8AAAD5AAAAqAAAAF0AAAAJAAAAAAAAAAAAAAAAAAAAAAAAAAwAAABUAAAApAAAAPcAAAD/AAAA/wAAAP8AAAD/AAAA9wAAAKQAAABUAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVAAAAKQAAAD3AAAA/wAAAP8AAAD/AAAA/wAAAPcAAACkAAAAVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQAAAF0AAACoAAAA+QAAAP8AAAD/AAAA/wAAAP8AAAD5AAAAqAAAAF0AAAAJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABUAAAApAAAAPcAAAD/AAAA/wAAAP8AAAD/AAAA9wAAAKQAAABUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFQAAACkAAAA9wAAAP8AAAD/AAAA/wAAAP8AAAD3AAAApAAAAFQAAAAAAAAAAAAAAAAAAAAA">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        .hearts-bg {
+            background-color: #1a1a2e;
+            background-image: radial-gradient(#ff477e 1px, transparent 1px),
+                            radial-gradient(#ff477e 1px, transparent 1px);
+            background-position: 0 0, 25px 25px;
+            background-size: 50px 50px;
+            opacity: 0.1;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 min-h-screen relative overflow-hidden">
+    <!-- Animated background -->
+    <div class="hearts-bg absolute inset-0"></div>
+    
+    <!-- Main content -->
+    <div class="min-h-screen flex items-center justify-center p-4 relative">
+        <div class="glass-effect rounded-3xl p-8 w-full max-w-sm animate__animated animate__fadeIn">
+            <div class="text-center space-y-6">
+                <div class="floating">
+                    <svg class="w-20 h-20 mx-auto text-pink-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.653 16.915l-.005-.003-.019-.01a20.759 20.759 0 01-1.162-.682 22.045 22.045 0 01-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 018-2.828A4.5 4.5 0 0118 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 01-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 01-.69.001l-.002-.001z"/>
+                    </svg>
+                </div>
+                
+                <h1 class="text-4xl font-bold text-white mb-2">BITS Tinder</h1>
+                <p class="text-gray-300">Find your perfect match at BITS Pilani Hyderabad Campus</p>
+                
+                <a href="{{ url_for('google_login') }}" 
+                   class="block w-full px-6 py-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-medium hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900">
+                    <div class="flex items-center justify-center space-x-3">
+                        <img src="https://www.google.com/favicon.ico" alt="Google" class="w-5 h-5">
+                        <span>Continue with BITS Mail</span>
+                    </div>
+                </a>
+
+                <!-- Stats Section -->
+                <div class="flex justify-center space-x-8 mt-6">
+                    <div class="text-center">
+                        <span class="block text-2xl font-bold text-pink-500">
+                            <span id="userCounter" data-target="{{ users_count }}">0</span>
+                        </span>
+                        <span class="text-sm text-gray-400">Registered Users</span>
+                    </div>
+                    <div class="text-center">
+                        <span class="block text-2xl font-bold text-purple-500">
+                            <span id="swipeCounter" data-target="{{ swipes_count }}">0</span>
+                        </span>
+                        <span class="text-sm text-gray-400">Total Swipes</span>
+                    </div>
+                </div>
+
+                <!-- Made with love text -->
+                <p class="text-sm text-gray-400 mt-6">
+                    Made with ❤️ by 
+                    <span class="font-medium text-pink-500">Aarush Kanipakam</span> 
+                    & 
+                    <span class="font-medium text-purple-500">Himnish Lalchandani</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    const animateCounter = (elementId, targetValue, duration = 2000) => {
+        const element = document.getElementById(elementId);
+        const target = parseInt(targetValue);
+        const increment = target / (duration / 16); // 60 FPS
+        let current = 0;
+    
+        const updateCounter = () => {
+            current += increment;
+            if (current >= target) {
+                element.textContent = target;
+                return;
+            }
+            element.textContent = Math.floor(current);
+            requestAnimationFrame(updateCounter);
+        };
+    
+        updateCounter();
+    };
+    
+    // Start the animations when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        const userCounter = document.getElementById('userCounter');
+        const swipeCounter = document.getElementById('swipeCounter');
+        
+        animateCounter('userCounter', userCounter.dataset.target);
+        animateCounter('swipeCounter', swipeCounter.dataset.target);
+    });
+    </script>
+
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon -->
+    <title>Profile - BITS Tinder</title>
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path fill='%23EC4899' d='M9.653 16.915l-.005-.003-.019-.01a20.759 20.759 0 01-1.162-.682 22.045 22.045 0 01-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 018-2.828A4.5 4.5 0 0118 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 01-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 01-.69.001l-.002-.001z'/></svg>">
+    <!-- Fallback favicon for browsers that don't support SVG -->
+    <link rel="shortcut icon"
+        href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAYAAAALAAAADwAAABEAAAASAAAAEgAAABEAAAAPAAAACwAAAAYAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAATAAAAIwAAACsAAAAwAAAAMgAAADIAAAAwAAAAKwAAACMAAAATAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAA4AAAAVAAAAGQAAABsAAAAbAAAAGQAAABUAAAAOAAAABgAAAAAAAAAAAAAAAAAAAAAAAAACAAAAEQAAACsAAABFAAAAVAAAAF0AAABfAAAAXQAAAFQAAABFAAAAKwAAABEAAAACAAAAAAAAAAAAAAAEAAAAGQAAAEAAAABrAAAAkAAAAKQAAACoAAAAqAAAAKQAAACQAAAAawAAAEAAAAAZAAAABAAAAAAAAAACAAAAEwAAAEAAAACEAAAA1AAAAO8AAAD3AAAA+QAAAPcAAADvAAAA1AAAAIQAAABAAAAAEwAAAAIAAAAAAAAABgAAACoAAABrAAAA1AAAAPwAAAD/AAAA/wAAAP8AAAD/AAAA/AAAANQAAABrAAAAKgAAAAYAAAAAAAAAAAAAAAwAAABFAAAAkAAAAO8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAO8AAACQAAAARQAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAVAAAAKQAAAD3AAAA/wAAAP8AAAD/AAAA/wAAAPcAAACkAAAAVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQAAAF0AAACoAAAA+QAAAP8AAAD/AAAA/wAAAP8AAAD5AAAAqAAAAF0AAAAJAAAAAAAAAAAAAAAAAAAAAAAAAAwAAABUAAAApAAAAPcAAAD/AAAA/wAAAP8AAAD/AAAA9wAAAKQAAABUAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVAAAAKQAAAD3AAAA/wAAAP8AAAD/AAAA/wAAAPcAAACkAAAAVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQAAAF0AAACoAAAA+QAAAP8AAAD/AAAA/wAAAP8AAAD5AAAAqAAAAF0AAAAJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABUAAAApAAAAPcAAAD/AAAA/wAAAP8AAAD/AAAA9wAAAKQAAABUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFQAAACkAAAA9wAAAP8AAAD/AAAA/wAAAP8AAAD3AAAApAAAAFQAAAAAAAAAAAAAAAAAAAAA">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        .glass-card {
+            background: rgba(30, 30, 46, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .custom-file-upload {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .custom-file-upload:hover {
+            border-color: #ec4899;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 min-h-screen">
+    <div class="min-h-screen p-4 py-8">
+        <form method="POST" enctype="multipart/form-data" class="max-w-md mx-auto space-y-6"
+            onsubmit="return validateForm()">
+            <div class="glass-card p-6 rounded-3xl space-y-6">
+                <h2 class="text-2xl font-bold text-white text-center">
+                    {% if profile.gender %}
+                    Update Your Profile
+                    {% else %}
+                    Create Your Profile
+                    {% endif %}
+                </h2>
+
+                <!-- Profile Picture Upload -->
+                <div class="custom-file-upload rounded-2xl p-6 text-center">
+                    <label class="block cursor-pointer relative">
+                        <input type="file" name="picture" accept="image/*" onchange="previewImage(event)"
+                            id="profile-picture" {% if not profile.profile_picture_url %}required{% endif %}
+                            style="opacity: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0; cursor: pointer;">
+                        <div id="preview-container" class="mb-3">
+                            {% if profile.profile_picture_url %}
+                            <img src="{{ profile.profile_picture_url }}"
+                                class="w-32 h-32 mx-auto rounded-full object-cover">
+                            {% else %}
+                            <svg class="w-20 h-20 mx-auto text-pink-500" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            {% endif %}
+                        </div>
+                        <span class="text-pink-500 font-medium">
+                            {% if profile.profile_picture_url %}
+                            Change Profile Picture
+                            {% else %}
+                            Upload Profile Picture*
+                            {% endif %}
+                        </span>
+                        <div id="photo-error" class="error-message hidden">Please upload a profile picture</div>
+                    </label>
+                </div>
+
+                <!-- Basic Info -->
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Age</label>
+                            <input type="number" name="age" required min="18" max="30" value="{{ profile.age or '' }}"
+                                class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Gender</label>
+                            {% if profile.gender %}
+                            <!-- For existing profiles - readonly gender -->
+                            <input type="text" value="{{ profile.gender }}" readonly
+                                class="w-full bg-gray-700 border border-gray-700 rounded-xl p-3 text-white cursor-not-allowed">
+                            <input type="hidden" name="gender" value="{{ profile.gender }}">
+                            {% else %}
+                            <!-- For new profiles - selectable gender -->
+                            <select name="gender" required
+                                class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                                <option value="">Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Phone Number</label>
+                        <input type="tel" name="phone" required value="{{ profile.phone or '' }}"
+                            class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Instagram ID (Optional)</label>
+                        <input type="text" name="insta_id" value="{{ profile.insta_id or '' }}"
+                            class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">About Me</label>
+                        <textarea name="description" rows="3"
+                            class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                            placeholder="Tell us about yourself...">{{ profile.description or '' }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questionnaire -->
+            <div class="glass-card p-6 rounded-3xl space-y-6">
+                <h3 class="text-xl font-bold text-white">Quick Questions</h3>
+
+                <div class="space-y-4">
+                    <div class="question-card bg-gray-800 p-4 rounded-xl">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Perfect first date?</label>
+                        <input type="text" name="q1" required
+                            value="{{ profile.answers.q1 if profile.answers else '' }}"
+                            class="w-full bg-gray-700 border-0 rounded-xl p-3 text-white focus:ring-2 focus:ring-pink-500">
+                    </div>
+
+                    <div class="question-card bg-gray-800 p-4 rounded-xl">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Favorite movie genre?</label>
+                        <input type="text" name="q2" required
+                            value="{{ profile.answers.q2 if profile.answers else '' }}"
+                            class="w-full bg-gray-700 border-0 rounded-xl p-3 text-white focus:ring-2 focus:ring-pink-500">
+                    </div>
+
+                    <div class="question-card bg-gray-800 p-4 rounded-xl">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Favorite cuisine?</label>
+                        <input type="text" name="q3" required
+                            value="{{ profile.answers.q3 if profile.answers else '' }}"
+                            class="w-full bg-gray-700 border-0 rounded-xl p-3 text-white focus:ring-2 focus:ring-pink-500">
+                    </div>
+
+                    <div class="question-card bg-gray-800 p-4 rounded-xl">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Your hobbies?</label>
+                        <input type="text" name="q4" required
+                            value="{{ profile.answers.q4 if profile.answers else '' }}"
+                            class="w-full bg-gray-700 border-0 rounded-xl p-3 text-white focus:ring-2 focus:ring-pink-500">
+                    </div>
+
+                    <div class="question-card bg-gray-800 p-4 rounded-xl">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Perfect weekend?</label>
+                        <input type="text" name="q5" required
+                            value="{{ profile.answers.q5 if profile.answers else '' }}"
+                            class="w-full bg-gray-700 border-0 rounded-xl p-3 text-white focus:ring-2 focus:ring-pink-500">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit"
+                class="w-full py-4 px-6 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-medium hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900">
+                {% if profile.gender %}
+                Update Profile
+                {% else %}
+                Create Profile
+                {% endif %}
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const errorElement = document.getElementById('photo-error');
+            const previewContainer = document.getElementById('preview-container');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewContainer.innerHTML = `
+                        <img src="${e.target.result}" class="w-32 h-32 mx-auto rounded-full object-cover">
+                    `;
+                }
+                reader.readAsDataURL(file);
+                errorElement.classList.add('hidden');
+            }
+        }
+
+        function validateForm() {
+            const profilePicInput = document.getElementById('profile-picture');
+            const errorElement = document.getElementById('photo-error');
+            const hasExistingPhoto = Boolean(document.querySelector('#preview-container img'));
+
+            // Only require photo if there's no existing profile picture
+            if (!hasExistingPhoto && !profilePicInput.files.length) {
+                errorElement.classList.remove('hidden');
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</body>
+
+</html>
